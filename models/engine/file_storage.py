@@ -45,8 +45,18 @@ class FileStorage():
         if not os.path.exists(FileStorage.__file_path):
             return
 
-        with open(FileStorage.__file_path, "r") as file:
-            strorage_dict = json.load(file)
+        with open(FileStorage.__file_path, "r") as f:
+            strorage_dict = json.load(f)
             for v in strorage_dict.values():
                 cls = v["__class__"]
-                self.new(eval(cls)(**v))
+                self.new(self.classes()[cls](**v))
+
+    def classes(self):
+        """Map class names to python classes"""
+        from models.base_model import BaseModel
+
+        classes = {
+            "BaseModel": BaseModel,
+        }
+
+        return classes
