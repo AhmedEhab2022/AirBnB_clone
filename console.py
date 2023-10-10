@@ -109,7 +109,27 @@ class HBNBCommand(cmd.Cmd):
         and id by adding or updating an attribute
         """
 
-        pass
+        if len(arg) == 0
+            return print("** class name missing **")
+
+        if args[0] not in HBNBCommand.__classes.keys():
+            return print("** class doesn't exist **")
+
+        if len(args) == 1:
+            return print("** instance id missing **")
+
+        key = args[0] + "." + args[1]
+        if key not in storage.all():
+            return print("** no instance found **")
+
+        if len(arg) == 2:
+            return print("** attribute name missing **")
+
+        if len(arg) == 3:
+            return print("** value missing **")
+
+        setattr(self, arg[2], arg[3])
+        self.save()
 
 
 if __name__ == '__main__':
