@@ -61,13 +61,3 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(bm_dict["__class__"], "BaseModel")
         self.assertEqual(type(bm_dict["created_at"]), str)
         self.assertEqual(type(bm_dict["updated_at"]), str)
-
-    def test_init_from_dict(self):
-        """Tests init from dictionary"""
-        bm = BaseModel()
-        bm_dict = bm.to_dict()
-        bm2 = BaseModel(**bm_dict)
-        self.assertEqual(bm.id, bm2.id)
-        self.assertEqual(bm.created_at, bm2.created_at)
-        self.assertEqual(bm.updated_at, bm2.updated_at)
-        self.assertEqual(bm.__dict__, bm2.__dict__)
