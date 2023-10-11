@@ -8,10 +8,10 @@ class User(BaseModel):
     """
     User class
     Attributes:
-        email: the email of the user
-        password: the password of the user
-        first_name: the first name of the user
-        last_name: the last name of the user
+        email (str): the email of the user
+        password (str): the password of the user
+        first_name (str): the first name of the user
+        last_name (str): the last name of the user
     """
     email = ""
     password = ""
