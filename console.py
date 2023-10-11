@@ -4,6 +4,11 @@
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from models import storage
 
 
@@ -13,7 +18,12 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     __classes = {
         "BaseModel": BaseModel,
-        "User": User
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
     }
 
     def do_quit(self, arg):
@@ -110,6 +120,14 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name
         and id by adding or updating an attribute
         """
+
+        # TODO: Write a function parser for the command line arguments
+        #       to handle the following cases:
+        #           update <class name> <id> <attribute name> "<attribute value>"
+        #       The parser should return a list of the arguments.
+
+        # TODO: cast the arguments to the appropriate types
+        #      (e.g. <number_rooms> should be cast to an int)
 
         if len(arg) == 0:
             return print("** class name missing **")
