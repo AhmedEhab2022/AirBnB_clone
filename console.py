@@ -3,6 +3,7 @@
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -12,6 +13,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     __classes = {
         "BaseModel": BaseModel,
+        "User": User
     }
 
     def do_quit(self, arg):
@@ -109,9 +111,10 @@ class HBNBCommand(cmd.Cmd):
         and id by adding or updating an attribute
         """
 
-        if len(arg) == 0
+        if len(arg) == 0:
             return print("** class name missing **")
 
+        args = arg.split()
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
@@ -122,14 +125,16 @@ class HBNBCommand(cmd.Cmd):
         if key not in storage.all():
             return print("** no instance found **")
 
-        if len(arg) == 2:
+        if len(args) == 2:
             return print("** attribute name missing **")
 
-        if len(arg) == 3:
+        if len(args) == 3:
             return print("** value missing **")
 
-        setattr(self, arg[2], arg[3])
-        self.save()
+        storage_objs = storage.all()
+
+        setattr(storage_objs[key], args[2], args[3])
+        storage_objs[key].save()
 
 
 if __name__ == '__main__':
