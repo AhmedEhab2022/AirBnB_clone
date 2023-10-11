@@ -54,9 +54,11 @@ class FileStorage():
     def classes(self):
         """Map class names to python classes"""
         from models.base_model import BaseModel
+        from models.user import User
 
         classes = {
             "BaseModel": BaseModel,
+            "User": User
         }
 
         return classes
