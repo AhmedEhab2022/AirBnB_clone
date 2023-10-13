@@ -128,13 +128,18 @@ class HBNBCommand(cmd.Cmd):
         and id by adding or updating an attribute
         """
 
-        # TODO: cast the arguments to the appropriate types
-        #      (e.g. <number_rooms> should be cast to an int)
-
         if len(arg) == 0:
             return print("** class name missing **")
 
         args = parse(arg)
+        for i in range(3):
+            args[i] = str(args[i])
+
+        if "num" in args[3] or "number" in args[3]:
+            args[3] = int(args[3])
+        else:
+            args[3] = str(args[3])
+
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
