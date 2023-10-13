@@ -33,6 +33,30 @@ class HBNBCommand(cmd.Cmd):
         "Review": Review
     }
 
+    def default(self, line):
+        """
+        handel other commands
+        """
+
+        cls_name = ""
+        op_name = ""
+        for i in range(len(line)):
+            if line[i] == '.':
+                i += 1
+                break
+            cls_name += line[i]
+
+        while i < len(line):
+            op_name += line[i]
+            i += 1
+
+        if cls_name not in HBNBCommand.__classes.keys():
+            return print("** class doesn't exist **")
+
+        if op_name == "all()":
+            print([str(v) for v in storage.all().values()
+                   if v.__class__.__name__ == cls_name])
+
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
