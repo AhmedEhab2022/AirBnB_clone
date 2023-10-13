@@ -35,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """
-        handel other commands
+        handel dot commands
         """
 
         cls_name = ""
@@ -46,24 +46,47 @@ class HBNBCommand(cmd.Cmd):
                 break
             cls_name += line[i]
 
+        if cls_name == line:
+            return print("*** Unknown syntax: {}".format(line))
+
         while i < len(line):
+            if line[i] == '(':
+                i += 1
+                break
             op_name += line[i]
+            i += 1
+
+        inst_id = ""
+        while i < len(line):
+            if line[i] == ')':
+                break
+            inst_id += line[i]
             i += 1
 
         if cls_name not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
-        if op_name == "all()":
+        if op_name == "all":
             print([str(v) for v in storage.all().values()
                    if v.__class__.__name__ == cls_name])
 
-        elif op_name == "count()":
+        elif op_name == "count":
             cnt = 0
             for v in storage.all().values():
                 if v.__class__.__name__ == cls_name:
                     cnt += 1
 
             print(cnt)
+
+        elif op_name == "show":
+            if inst_id == "":
+                return print("** instance id missing **")
+
+            key = cls_name + "." + inst_id
+            if key not in storage.all():
+                return print("** no instance found **")
+
+            print(storage.all()[key])
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
