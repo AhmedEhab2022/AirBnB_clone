@@ -58,9 +58,25 @@ class HBNBCommand(cmd.Cmd):
 
         inst_id = ""
         while i < len(line):
-            if line[i] == ')':
+            if line[i] == ')' or ',':
+                i += 2
                 break
             inst_id += line[i]
+            i += 1
+
+        attr_name = ""
+        while i < len(line):
+            if line[i] == ',':
+                i += 2
+                break
+            attr_name += line[i]
+            i += 1
+
+        attr_value = ""
+        while i < len(line):
+            if line[i] == ')':
+                break
+            attr_value += line[i]
             i += 1
 
         if cls_name not in HBNBCommand.__classes.keys():
@@ -87,6 +103,36 @@ class HBNBCommand(cmd.Cmd):
                 return print("** no instance found **")
 
             print(storage.all()[key])
+
+        elif op_name == "destroy":
+            if inst_id == "":
+                return print("** instance id missing **")
+
+            key = cls_name + "." + inst_id
+            if key not in storage.all():
+                return print("** no instance found **")
+
+            del storage.all()[key]
+            storage.save()
+
+        elif op_name == "update":
+            if inst_id == "":
+                return print("** instance id missing **")
+
+            key = cls_name + "." + inst_id
+            if key not in storage.all():
+                return print("** no instance found **")
+
+            if attr_name == "":
+                return print("** attribute name missing **")
+
+            if attr_value == "":
+                return print("** value missing **")
+
+            storage_objs = storage.all()
+
+            setattr(storage_objs[key], attr_name, attr_value)
+            storage_objs[key].save()
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
