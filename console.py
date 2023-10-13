@@ -12,6 +12,13 @@ from models.review import Review
 from models import storage
 
 
+def parse(arg):
+    from shlex import split
+    """Parses command line arguments"""
+    args = split(arg)
+    return args
+
+
 class HBNBCommand(cmd.Cmd):
     """HBNBCommand class """
 
@@ -63,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         if len(arg) == 0:
             return print("** class name missing **")
 
-        args = arg.split()
+        args = parse(arg)
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
@@ -76,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
 
         print(storage.all()[key])
 
-    def do_destory(self, arg):
+    def do_destroy(self, arg):
         """
         Usage: destory <class> <id>
         Deletes an instance based on the class name and id
@@ -84,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
         if len(arg) == 0:
             return print("** class name missing **")
 
-        args = arg.split()
+        args = parse(arg)
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
@@ -104,10 +111,10 @@ class HBNBCommand(cmd.Cmd):
         Prints all string representation of all
         instances based or not on the class name
         """
-        if (len(arg) == 0):
+        if len(arg) == 0:
             return print([str(x) for x in storage.all().values()])
 
-        args = arg.split()
+        args = parse(arg)
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
@@ -121,18 +128,13 @@ class HBNBCommand(cmd.Cmd):
         and id by adding or updating an attribute
         """
 
-        # TODO: Write a function parser for the command line arguments
-        #       to handle the following cases:
-        #           update <class name> <id> <attribute name> "<attribute value>"
-        #       The parser should return a list of the arguments.
-
         # TODO: cast the arguments to the appropriate types
         #      (e.g. <number_rooms> should be cast to an int)
 
         if len(arg) == 0:
             return print("** class name missing **")
 
-        args = arg.split()
+        args = parse(arg)
         if args[0] not in HBNBCommand.__classes.keys():
             return print("** class doesn't exist **")
 
