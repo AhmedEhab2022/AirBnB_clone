@@ -57,6 +57,14 @@ class HBNBCommand(cmd.Cmd):
             print([str(v) for v in storage.all().values()
                    if v.__class__.__name__ == cls_name])
 
+        elif op_name == "count()":
+            cnt = 0
+            for v in storage.all().values():
+                if v.__class__.__name__ == cls_name:
+                    cnt += 1
+
+            print(cnt)
+
     def do_quit(self, arg):
         """Quit command to exit the program"""
         return True
