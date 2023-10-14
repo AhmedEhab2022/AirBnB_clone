@@ -38,16 +38,23 @@ class HBNBCommand(cmd.Cmd):
         handel dot commands
         """
 
+        if '.' not in line:
+            return print("*** Unknown syntax: {}".format(line))
+
         cls_name = ""
         op_name = ""
+        inst_id = ""
+        attr_name = ""
+        attr_value = ""
+        attr_dict = {}
         for i in range(len(line)):
             if line[i] == '.':
                 i += 1
                 break
             cls_name += line[i]
 
-        if cls_name == line:
-            return print("*** Unknown syntax: {}".format(line))
+        if cls_name not in HBNBCommand.__classes.keys():
+            return print("** class doesn't exist **")
 
         while i < len(line):
             if line[i] == '(':
@@ -56,35 +63,53 @@ class HBNBCommand(cmd.Cmd):
             op_name += line[i]
             i += 1
 
-        inst_id = ""
         while i < len(line):
-            if line[i] == ')' or ',':
+            if line[i] == ')' or line[i] == ',':
                 i += 2
                 break
-            inst_id += line[i]
+            if line[i] != '"' and line[i] != "'":
+                inst_id += line[i]
             i += 1
 
-        attr_name = ""
-        while i < len(line):
-            if line[i] == ',':
-                i += 2
-                break
-            attr_name += line[i]
+        if i < len(line) and line[i] == '{':
             i += 1
+            while i < len(line) and line[i] != "}":
+                f = True
+                attr_name = ""
+                attr_value = ""
+                while i < len(line) and line[i] != ',':
+                    if line[i] == '"' or line[i] == "'" or line[i] == " ":
+                        i += 1
+                        continue
+                    elif line[i] == ":":
+                        i += 2
+                        f = False
+                    if f:
+                        attr_name += line[i]
+                    else:
+                        attr_value += line[i]
 
-        attr_value = ""
-        while i < len(line):
-            if line[i] == ')':
-                break
-            attr_value += line[i]
-            i += 1
+                    i += 1
+                attr_dict[attr_name] = attr_value
+                i += 1
 
-        if cls_name not in HBNBCommand.__classes.keys():
-            return print("** class doesn't exist **")
+        elif i < len(line):
+            while i < len(line):
+                if line[i] == ',':
+                    i += 2
+                    break
+                attr_name += line[i]
+                i += 1
+
+            while i < len(line):
+                if line[i] == ')':
+                    break
+                attr_value += line[i]
+                i += 1
 
         if op_name == "all":
-            print([str(v) for v in storage.all().values()
-                   if v.__class__.__name__ == cls_name])
+            return print([str(v) for v in storage.all().values()
+                         if v.__class__.__name__ == cls_name])
 
         elif op_name == "count":
             cnt = 0
@@ -93,46 +118,38 @@ class HBNBCommand(cmd.Cmd):
                     cnt += 1
 
             print(cnt)
+            return
+
+        if inst_id == "":
+            return print("** instance id missing **")
+
+        key = cls_name + "." + inst_id
+        if key not in storage.all():
+            return print("** no instance found **")
 
         elif op_name == "show":
-            if inst_id == "":
-                return print("** instance id missing **")
-
-            key = cls_name + "." + inst_id
-            if key not in storage.all():
-                return print("** no instance found **")
-
-            print(storage.all()[key])
+            return print(storage.all()[key])
 
         elif op_name == "destroy":
-            if inst_id == "":
-                return print("** instance id missing **")
-
-            key = cls_name + "." + inst_id
-            if key not in storage.all():
-                return print("** no instance found **")
-
             del storage.all()[key]
             storage.save()
+            return
+
+        if attr_name == "":
+            return print("** attribute name missing **")
+
+        if attr_value == "":
+            return print("** value missing **")
 
         elif op_name == "update":
-            if inst_id == "":
-                return print("** instance id missing **")
-
-            key = cls_name + "." + inst_id
-            if key not in storage.all():
-                return print("** no instance found **")
-
-            if attr_name == "":
-                return print("** attribute name missing **")
-
-            if attr_value == "":
-                return print("** value missing **")
-
             storage_objs = storage.all()
-
-            setattr(storage_objs[key], attr_name, attr_value)
-            storage_objs[key].save()
+            if attr_dict == {}:
+                setattr(storage_objs[key], attr_name, attr_value)
+                storage_objs[key].save()
+            else:
+                for name, value in attr_dict.items():
+                    setattr(storage_objs[key], name, value)
+                    storage_objs[key].save()
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
