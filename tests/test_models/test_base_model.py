@@ -44,7 +44,7 @@ class TestBaseModel(unittest.TestCase):
         """Tests __str__ method"""
         bm_str = self.bm.__str__()
         self.assertEqual(bm_str,
-                         "[BaseModel] ({}) {}".format(self.bm.id, self.bm.__dict__))
+                         f"[BaseModel] ({self.bm.id}) {self.bm.__dict__}")
 
     def test_to_dict(self):
         """Tests to_dict method"""
