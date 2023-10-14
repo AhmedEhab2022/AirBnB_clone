@@ -26,6 +26,12 @@ class TestCity(unittest.TestCase):
         self.assertEqual(type(self.city.name), str)
         self.assertEqual(self.city.name, "")
 
+    def test_city_state_id(self):
+        """Tests city state_id"""
+        self.assertTrue(hasattr(self.city, "state_id"))
+        self.assertEqual(type(self.city.state_id), str)
+        self.assertEqual(self.city.state_id, "")
+
     def test_city_id(self):
         """Tests city id"""
         self.assertTrue(hasattr(self.city, "id"))
